@@ -33,8 +33,8 @@ app.get('/api/hello', function(req, res) {
 
 //URL Shortener
 let urlSchema = new mongoose.Schema({
-  originalURL = String,
-  shortURL = String
+  original_url: String,
+  short_url: String
 })
 let urls = mongoose.model('urls', urlSchema);
 
@@ -47,23 +47,22 @@ dns.lookup(enteredURL, err => {
     res.json({ error: 'invalid url' })
   }else{
     let urlEnding = nanoid(10);
+
     let shortener = new urls({
       original_url: enteredURL,
       short_url: __dirname + "/api/shorturl/" + urlEnding
-    })
-    shortener.save((err, doc) => {
-      if (err) console.log('error');
-      res.json({
-        original_url: enteredURL,
-        short_url: shortener.short_url
-      })
-    })
-  }
-})
-})
+  })
 
-app.get("/api/shorturl/:ending", (req, res) => {
-  let endURL = req.params.ending;
+  shortener.save((err, doc) => {
+       if (err) return console.error(err);
+       res.json({
+         original_url: shortener.original_url,
+         short_url: shortener.short_url
+       })
+     })
+
+}
+})
 })
 
 
