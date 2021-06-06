@@ -62,6 +62,9 @@ dns.lookup(enteredURL, err => {
 })
 })
 
+app.get("/api/shorturl/:ending", (req, res) => {
+  let endURL = req.params.ending;
+})
 
 
 app.listen(port, function() {
