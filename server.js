@@ -6,6 +6,7 @@ var mongo = require("mongodb");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 const { nanoid } = require("nanoid");
+var url = require("url");
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
@@ -30,46 +31,61 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
 
-//URL Shortener
+//URL Shortener/
+
 let addressSchema = new mongoose.Schema({
   original_url: String,
-  short_url: String,
-  urlEnding: String
+  short_url: String
 });
 let address = mongoose.model("address", addressSchema);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+function isValidHttpUrl(string) {
+  let url;
+
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+}
+
 app.post("/api/shorturl", (req, res) => {
   let enteredURL = req.body.url;
-  dns.lookup(enteredURL, (err) => {
-    if (err) {
-      res.json({ error: "invalid url" });
-    } else {
-      let urlEnding = nanoid(10);
 
-      let shortener = new address({
-        original_url: enteredURL,
-        short_url: __dirname + "/api/shorturl/" + urlEnding,
-        urlEnding: urlEnding
-      });
+  if (isValidHttpUrl(enteredURL) == false) {
+    res.json({ error: "invalid url" });
+  } else {
+    let urlEnding = nanoid(10);
 
-      shortener.save((err, doc) => {
-        if (err) return console.error(err);
-        res.json({
-          original_url: shortener.original_url,
-          short_url: shortener.short_url
-        });
+    let shortener = new address({
+      original_url: enteredURL,
+      short_url: urlEnding
+    });
+
+    shortener.save((err, doc) => {
+      if (err) return console.error(err);
+      res.json({
+        original_url: shortener.original_url,
+        short_url: shortener.short_url
       });
-    }
-  });
+    });
+  }
 });
 
-app.get("/api/shorturl/:urlEnding", (req, res) => {
-  let ending = req.params.urlEnding;
-  address.find({ urlEnding: ending }, (err, docs) => {
-    if (err) return console.error(err);
-    res.redirect(docs[0].original_url);
+app.get("/api/shorturl/:shorturl", (req, res) => {
+  let shorturl = req.params.shorturl;
+  address.findOne({ short_url: shorturl }, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else if (/^http/.test(result.original_url) == false) {
+      res.redirect("https://" + result.original_url);
+    } else {
+      res.redirect(result.original_url);
+    }
   });
 });
 
