@@ -6,7 +6,6 @@ var mongo = require("mongodb");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 const { nanoid } = require("nanoid");
-var dns = require("dns");
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
