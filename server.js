@@ -7,6 +7,7 @@ var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 const { nanoid } = require("nanoid");
 var url = require("url");
+const path = require('path');
 
 app.set('views', path.join(__dirname,'views'));
 
