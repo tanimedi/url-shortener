@@ -8,6 +8,8 @@ var bodyParser = require("body-parser");
 const { nanoid } = require("nanoid");
 var url = require("url");
 
+app.set('views', path.join(__dirname,'views'));
+
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
