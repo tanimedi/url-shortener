@@ -10,7 +10,7 @@ var url = require("url");
 
 
 // Basic Configuration
-path.join(process.cwd(), 'views');
+
 
 const port = process.env.PORT || 3000;
 
