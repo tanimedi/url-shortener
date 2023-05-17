@@ -2,8 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
-var mongo = require("mongodb");
-var mongoose = require("mongoose");
+
 var bodyParser = require("body-parser");
 const { nanoid } = require("nanoid");
 var url = require("url");
@@ -15,12 +14,6 @@ app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 const port = process.env.PORT || 3000;
 
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .catch((err) => console.log(err));
 
 app.use(cors());
 
