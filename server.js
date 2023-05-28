@@ -7,7 +7,10 @@ var bodyParser = require("body-parser");
 const { nanoid } = require("nanoid");
 var url = require("url");
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of fd9a20c (add app.set)
 // Basic Configuration
 app.set('views', path.join(__dirname,'views'));
 app.set('view engine', 'ejs');
