@@ -2,21 +2,21 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
-
+var mongo = require("mongodb");
+var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 const { nanoid } = require("nanoid");
 var url = require("url");
 
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of fd9a20c (add app.set)
 // Basic Configuration
-app.set('views', path.join(__dirname,'views'));
-app.set('view engine', 'ejs');
-app.engine('html', require('ejs').renderFile);
 const port = process.env.PORT || 3000;
 
+mongoose
+  .connect(process.env.DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .catch((err) => console.log(err));
 
 app.use(cors());
 
@@ -92,5 +92,3 @@ app.get("/api/shorturl/:shorturl", (req, res) => {
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
 });
-
-module.exports = app
